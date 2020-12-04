@@ -5,6 +5,7 @@ import type { Plugin } from 'vite'
 import { GenerateSWConfig } from 'workbox-build'
 import { HTMLTransformer } from './transformers/html'
 import { ManifestOptions, VitePWAOptions } from './types'
+import { createServerPlugin } from './server'
 
 export function VitePWA(options: Partial<VitePWAOptions> = {}): Plugin {
   const root = options.root || process.cwd()
@@ -36,6 +37,7 @@ export function VitePWA(options: Partial<VitePWAOptions> = {}): Plugin {
 
   return {
     indexHtmlTransforms: [HTMLTransformer(resolvedOptions)],
+    configureServer: createServerPlugin(resolvedOptions),
     rollupInputOptions: {
       pluginsPostBuild: [
         generateSW(workbox),
